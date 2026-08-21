@@ -1,2 +1,12 @@
-node_modules/
+# Editor / OS noise
 .DS_Store
+*.log
+coverage/
+dist/
+.eslintcache
+node_modules/
+
+# Editor
+.idea/
+.vscode/
+*.swp
