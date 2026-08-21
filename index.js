@@ -11,6 +11,8 @@
 // The same-origin route pattern mirrors @kiligzzz/dsh-session-archive:
 // ctx.inject(['webServer']) registers an exact-path handler.
 
+import { blockText } from './lib/shared.js'
+
 export const name = '@kiligzzz/dsh-session-nav'
 
 export const inject = ['sessions', 'sessionPersistence']
@@ -27,14 +29,6 @@ function responseJson(res, status, payload) {
     'cache-control': 'no-store',
   })
   res.end(body)
-}
-
-/** Extract plain text from one message-content block. */
-function blockText(block) {
-  if (!block || typeof block !== 'object') return undefined
-  if (typeof block.text === 'string' && block.text.length > 0) return block.text
-  if (typeof block.content === 'string' && block.content.length > 0) return block.content
-  return undefined
 }
 
 /**
