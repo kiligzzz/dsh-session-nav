@@ -74,6 +74,26 @@ dsh plugin --profile web add link:<本目录>
 rAF 合并重算；无常驻 MutationObserver、无定时器。锚点行走 `isConnected` 校验的缓存，
 虚拟滚动回收重建不影响正确性。
 
+## 开发
+
+环境要求：Node.js >= 18。
+
+```bash
+pnpm install        # 开发依赖（vitest / eslint / prettier）
+pnpm test           # 运行单元测试（31 个用例）
+pnpm lint           # eslint 检查
+pnpm format         # prettier 格式化
+```
+
+结构说明：
+
+- 纯函数（文本提取、截断、键身份、集群几何）放在 `lib/shared.js`，host 与 browser
+  两端共用同一实现，测试只需覆盖一次。
+- browser 半端是手写 bundle、无构建步骤：改 `lib/client.js` 刷新页面即可；host 端
+  （`index.js`）改动需要重载插件。
+- `window.__dssnNavDebug__` 暴露诊断信息（`entryCount`、`fullCount`、`stats`），
+  便于 CDP 检查。
+
 ## License
 
 MIT

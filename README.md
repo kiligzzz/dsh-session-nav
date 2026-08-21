@@ -86,6 +86,28 @@ ResizeObserver → rAF-merged recomputes; no perpetual MutationObserver, no time
 Anchor rows go through an `isConnected`-validated cache so virtualized list recycling
 stays cheap.
 
+## Development
+
+Requirements: Node.js >= 18.
+
+```bash
+pnpm install        # dev dependencies (vitest, eslint, prettier)
+pnpm test           # run the unit test suite (31 tests)
+pnpm lint           # eslint check
+pnpm format         # prettier formatting
+```
+
+Layout notes:
+
+- Pure helpers (text extraction, truncation, key identity, cluster geometry)
+  live in `lib/shared.js` so the host and browser halves share one
+  implementation and the tests cover it once.
+- The browser half is a hand-written bundle with no build step: edit
+  `lib/client.js` and refresh the page; host changes (`index.js`) need a
+  plugin reload.
+- `window.__dssnNavDebug__` exposes diagnostics (`entryCount`, `fullCount`,
+  `stats`) for CDP inspection.
+
 ## License
 
 MIT
