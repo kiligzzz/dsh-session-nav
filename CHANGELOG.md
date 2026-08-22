@@ -6,6 +6,12 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-08-22
+
+### Fixed
+
+- 修复安装后启动崩溃（`ERR_MODULE_NOT_FOUND: Cannot find module '.../lib/shared.js'`）：`package.json` `files` 白名单补齐 `lib/shared.js`，此前通过 npm / git 安装时该文件被过滤掉导致 DSH 恢复回滚。感谢 [@bakebakebakebake](https://github.com/bakebakebakebake) 的 PR #2。
+
 ## [0.1.3] - 2026-08-22
 
 ### Fixed
