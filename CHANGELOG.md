@@ -6,24 +6,21 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
-### Added
+## [0.1.1] - 2026-08-22
 
-- Unit test suite (vitest): host question extraction, shared text/geometry
-  helpers, cluster pitch compression — 31 tests.
-- GitHub Actions CI: node 20/22 matrix running the full test suite.
-- ESLint + Prettier configs and npm scripts.
-- Keyboard navigation: arrow keys move the hover/focus index within the key
-  strip; `aria-current` marks the active key; the strip exposes a group
-  role with a descriptive label.
-- Transient user-facing notice when a jump degrades (no paging handle,
-  history load failure, or target not found).
-- Narrow-window guard: tooltip and notice clamp to the viewport width.
+### Fixed
+
+- Startup race: the browser half now retries the full-history questions fetch
+  (500ms then 1000ms) instead of giving up once. On a fresh launch the current
+  session's log may not be flushed to disk yet, so the first fetch could fail
+  with "session not found" and permanently drop the full-history navigation
+  keys. Retrying after the log lands restores them.
 
 ### Changed
 
-- Extracted pure helpers (`blockText`, `textOfBlocks`, `clampModelText`,
-  `keyIdentity`, `computeCluster`, `sameLayout`) into `lib/shared.js`,
-  imported by both the host and browser halves and unit-tested once.
+- Widened `peerDependencies` for `@deepseek-ai/dsh-client-runtime` and
+  `@deepseek-ai/dsh-client-ui-slots` to `^0.1.0-rc.7 || ^0.1.1-rc.1` so the
+  plugin declares compatibility with the 0.1.1 harness line.
 
 ## [0.1.0] - 2026-08-20
 
