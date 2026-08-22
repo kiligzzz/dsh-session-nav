@@ -6,6 +6,13 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-08-22
+
+### Fixed
+
+- 补 cordis peerDependencies（`^4.0.0-rc.7 || ^4.0.0`）：v0.1.2 发布时漏声明 cordis，且 npm 无 4.0.0 正式版导致商店校验警告。
+- 版本号与 tag 对齐：v0.1.2 tag 指向的 package.json 实际 version 为 0.1.1，本版修正为 0.1.3。
+
 ## [0.1.2] - 2026-08-22
 
 ### Changed
