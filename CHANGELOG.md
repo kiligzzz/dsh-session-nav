@@ -6,6 +6,13 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-08-30
+
+### Fixed
+
+- 悬停气泡（tooltip）模型回复缺失：DSH 0.1.2 的 `chat.order` 只含 `visibility=visible` 节点，部分 `assistant-step`（hidden）不进 order，`buildEntries` 遍历不到 → `modelText` 为空，气泡只剩「第 N 轮」+ 用户消息。
+  - 修复：`buildEntries` 增加兜底——用官方 TurnNavigator 同款数据源 `snapshot.locations.getTurn()`（含 hidden 的完整 turn 索引）补充该轮 `assistant-step` / `assistant` 的文本块。
+
 ## [0.1.8] - 2026-08-30
 
 ### Added

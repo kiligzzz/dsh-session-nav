@@ -1,7 +1,7 @@
 {
   "name": "@kiligzzz/dsh-session-nav",
   "description": "Piano-key style in-conversation navigation bar for the DeepSeek Harness web GUI: one key per user message, hover ladder animation, turn-preview tooltip, active-message highlight, click-to-jump. Official dual-face dsh plugin (host + client), no dsh source changes.",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "keywords": [
     "dsh",
     "dsh-plugin",
