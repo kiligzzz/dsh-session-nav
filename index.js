@@ -11,7 +11,7 @@
 // The same-origin route pattern mirrors @kiligzzz/dsh-session-archive:
 // ctx.inject(['webServer']) registers an exact-path handler.
 
-import { blockText } from './lib/shared.js'
+import { blockText, textOfBlocks, clampModelText } from './lib/shared.js'
 
 export const name = '@kiligzzz/dsh-session-nav'
 
@@ -32,7 +32,8 @@ function responseJson(res, status, payload) {
 }
 
 /**
- * Read every REAL user question of a session from its on-disk log.
+ * Read every REAL user question of a session from its on-disk log, plus the
+ * model reply of the same turn where the log has one.
  * Filters by source.kind === 'user' so agent-injected steering / plugin /
  * skill-catalog messages never become navigation keys. Purely observational.
  */
@@ -42,25 +43,42 @@ export async function listUserQuestions(sessionId, persistence, signal) {
   }
   const { meta, events } = await persistence.readFrom(sessionId, 0, signal)
   const questions = []
+  let pending = null // user question awaiting its turn's assistant reply
   for (const event of events) {
-    if (!event || event.type !== 'user/message') continue
+    if (!event || typeof event !== 'object') continue
+    const type = event.type
     const data = event.data && typeof event.data === 'object' ? event.data : {}
-    const source = data.source && typeof data.source === 'object' ? data.source : {}
-    if (source.kind !== 'user') continue
-    const blocks = data.content
-    const text = (Array.isArray(blocks) ? blocks : [blocks])
-      .map(blockText)
-      .filter((t) => typeof t === 'string' && t.length > 0)
-      .join(' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-    if (text.length === 0) continue
-    questions.push({
-      seq: event.seq,
-      id: typeof data.id === 'string' ? data.id : String(event.seq),
-      text,
-    })
+    if (type === 'user/message') {
+      const source = data.source && typeof data.source === 'object' ? data.source : {}
+      if (source.kind !== 'user') { pending = null; continue }
+      const blocks = data.content
+      const text = (Array.isArray(blocks) ? blocks : [blocks])
+        .map(blockText)
+        .filter((t) => typeof t === 'string' && t.length > 0)
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+      if (text.length === 0) { pending = null; continue }
+      pending = {
+        seq: event.seq,
+        id: typeof data.id === 'string' ? data.id : String(event.seq),
+        text,
+        response: '',
+      }
+      questions.push(pending)
+    } else if (type === 'assistant/message' && pending !== null) {
+      // 同一 turn 的模型回复：assistant/message 的 content 是 blocks
+      const content = data.message && typeof data.message === 'object'
+        ? data.message.content
+        : (data.content ?? undefined)
+      const reply = textOfBlocks(Array.isArray(content) ? content : (content !== undefined ? [content] : []))
+      if (reply) pending.response = reply
+    } else if (type === 'turn/end' || type === 'steering/message' || type === 'user/message') {
+      // turn 结束或新用户消息：当前 pending 不再追加
+      if (type !== 'user/message') pending = null
+    }
   }
+  for (const q of questions) q.response = clampModelText(q.response)
   return { title: typeof meta.title === 'string' ? meta.title : undefined, questions }
 }
 
