@@ -6,6 +6,14 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-08-30
+
+### Added
+
+- 自动隐藏官方紧凑回合导航（`TurnNavigator`）：本插件钢琴键已是会话内导航的同位替代，安装即自动隐藏官方右侧「跳转到第 N 轮」竖排按钮，避免双导航并存。
+  - 选择器：`div[class*="_marks"]`（容器）+ `button[aria-label^="跳转到第"]`（按钮，稳定中文文案锁定，跨 DSH 版本不依赖哈希类名）。
+  - 实测目标：DSH 0.1.2 官方 `uEy0Ta_marks` 容器（28×70px，右侧 x=1232，8 个跳转按钮）。
+
 ## [0.1.4] - 2026-08-22
 
 ### Fixed
