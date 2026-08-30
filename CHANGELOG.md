@@ -6,6 +6,12 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.8] - 2026-08-30
+
+### Added
+
+- 悬停气泡（tooltip）新增轮次徽标：气泡顶部显示「第 N 轮」（N 为该键在全部用户消息中的序号，1 起），方便在长会话中确认当前悬停的是第几轮，定位更直观。
+
 ## [0.1.7] - 2026-08-30
 
 ### Fixed
