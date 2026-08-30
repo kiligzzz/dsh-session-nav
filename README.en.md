@@ -46,6 +46,15 @@ Reference implementation: [KeLearns/dsh-navigation-bar](https://github.com/KeLea
   top of the viewport.
 - **Light/dark theme** via `data-ds-dark-theme` + `prefers-color-scheme` fallback.
 
+## Compatibility
+
+- **DSH 0.1.2+ supported** (v0.1.11+): 0.1.2 reworked the session-snapshot shape
+  (`session.getSnapshot()` no longer carries the `navigation` projection); this plugin
+  now reads the full chat snapshot from the official `uiConversation` service
+  (`viewStore.get('chat')`), the same source as the official turn navigator, and
+  extracts historical replies from the on-disk log — every turn previews its reply.
+- Versions before 0.1.2: still work (falls back to the legacy snapshot path).
+
 ## Install
 
 ### From GitHub (recommended)
@@ -74,8 +83,10 @@ plugin, restart the `dsh web` instance, then refresh the page. Editing
 | `package.json` | `dsh.bundle.patch` + `dsh.client` (platform web) declarations |
 
 Data sources (all official APIs):
+- `ctx.uiConversation.binding(currentId).viewStore.get('chat')` → full chat snapshot
+  (with `navigation`, 0.1.2+; subscribed via `useSyncExternalStore`)
 - `ctx.sessions.binding(currentId).session` → `ConversationSnapshot`
-  (`useSyncExternalStore` live subscription)
+  (fallback for pre-0.1.2 / when uiConversation is unavailable)
 - `ctx.sessionPersistence.readFrom(sessionId, 0)` → full session log (host half)
 - DOM anchors: scroll container `[data-conversation-scroll]`, message rows
   `[data-chat-anchor-key]`

@@ -42,6 +42,14 @@
 - **仅对话视图显示**（v0.1.5+）：钢琴键只在「对话」Tab 渲染，切到轨迹 / Agent 调度 /
   记忆系统等视图时自动隐藏，不干扰其他面板。
 
+## 兼容性
+
+- **适配 DSH 0.1.2+**（v0.1.11+）：0.1.2 重构了会话快照结构（`session.getSnapshot()`
+  不再包含 `navigation` 投影），本插件已改用官方 `uiConversation` 服务的 chat 完整
+  快照（`viewStore.get('chat')`）取回复文本，与官方「紧凑回合导航」同源；
+  历史轮次回复由 host 端从磁盘日志提取，全量轮次均可预览。
+- 0.1.2 之前版本：同样可用（自动回退旧快照路径）。
+
 ## 安装
 
 ### 方式一：从 GitHub 安装（推荐）
@@ -69,8 +77,10 @@ dsh plugin --profile web add link:<本目录>
 | `package.json` | `dsh.bundle.patch` + `dsh.client`（platform web）声明 |
 
 数据来源（全部官方 API）：
+- `ctx.uiConversation.binding(currentId).viewStore.get('chat')` → chat 完整快照
+  （含 `navigation`，0.1.2+；`useSyncExternalStore` 实时订阅）
 - `ctx.sessions.binding(currentId).session` → `ConversationSnapshot`
-  （`useSyncExternalStore` 实时订阅）
+  （0.1.2 前 / 无 uiConversation 时回退）
 - `ctx.sessionPersistence.readFrom(sessionId, 0)` → 全量会话日志（host 端）
 - DOM 锚点：滚动容器 `[data-conversation-scroll]`，消息行 `[data-chat-anchor-key]`
 - 分页：`session.loadOlder()`（与官方「加载更早」按钮同一通道）
