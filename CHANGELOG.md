@@ -6,6 +6,16 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.11] - 2026-08-30
+
+### Fixed
+
+- 悬停气泡（tooltip）模型回复缺失（DSH 0.1.2 架构修改适配）：
+  - `session.getSnapshot()` 不再含 `navigation` 投影（0.1.2 起），回复文本取不到。
+  - 修复：改用 `ctx.uiConversation.binding(id).viewStore.get('chat')`（官方 chat 完整 snapshot，含 `order/nodes/locations/navigation/timeline/legacy`）+ `target('chat').subscribe` 订阅，与官方 TurnNavigator 同源。
+  - 官方 `navigation` 只维护加载窗口内的 turn 投影（约最近 5 轮）——历史轮次回复由 host 半从磁盘日志 `assistant/message` 事件提取（`listUserQuestions` 增强，`clampModelText` 裁剪）。
+  - 性能：host 半全量读日志仅切会话触发一次（毫秒级），刻意不加缓存以保持无状态/永不失效。
+
 ## [0.1.10] - 2026-08-30
 
 ### Fixed
