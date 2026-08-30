@@ -6,6 +6,12 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.10] - 2026-08-30
+
+### Fixed
+
+- 悬停气泡（tooltip）模型回复缺失（v0.1.9 兜底仍未生效）：改用**官方 TurnNavigator 的现成数据源** `snapshot.navigation.items()`——官方已把每个 turn 的 `prompt` / `response` 文本提取好（`responseText()`），`buildEntries` 直接消费，不再自行遍历 `chat.order` / `locations`。该路径存在即优先使用，缺失时回退旧逻辑。
+
 ## [0.1.9] - 2026-08-30
 
 ### Fixed
