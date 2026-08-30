@@ -6,6 +6,14 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-08-30
+
+### Fixed
+
+- 切到轨迹 / Agent 调度 / 记忆系统等 Tab 时钢琴键仍残留（v0.1.5 的「仅对话视图」修复未完全生效）。
+  - 根因：`findScrollport()` 用 `getClientRects().length > 0` 判断可见性（`display:none` 时返回 null），`compute()` 的 `!sp → hidden` 分支逻辑正确，但切 view 时**没有任何 observer 触发重算**——modal observer 只监听 `[aria-modal="true"]`，shell observer 只监听 `[data-shell-overlay]`，均不覆盖 chat 容器 `display` 变化。
+  - 修复：body MutationObserver 增加 scrollport 可见性翻转检测（与 modal 检测同模式，仅翻转时 `schedule()`，避免流式渲染每帧重算）。切 Tab → chat 容器 `display:none` → 触发重算 → 钢琴键隐藏。
+
 ## [0.1.5] - 2026-08-30
 
 ### Added
