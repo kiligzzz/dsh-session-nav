@@ -6,6 +6,14 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.12] - 2026-08-30
+
+### Fixed
+
+- CI 修复（v0.1.11 的 GitHub Actions 失败）：
+  - `pnpm-lock.yaml` 与 `package.json` 不一致（改依赖未更新 lockfile）——`peerDependencies` 改用 npm 可解析版本（`dsh-client-store` 为私有包 npm 无，移除；`dsh-client-ui-conversation` 用 `^0.1.0-rc.8 || ^0.1.1-rc.2`），`inject` 清单只保留 `slots` + `ui-conversation`。
+  - `pnpm-workspace.yaml` 缺 `packages` 字段（pnpm 9 要求，报 `packages field missing or empty`）——补 `packages: ['.']` + `allowBuilds.esbuild: true`。
+
 ## [0.1.11] - 2026-08-30
 
 ### Fixed
