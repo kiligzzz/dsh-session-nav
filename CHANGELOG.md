@@ -6,6 +6,13 @@ All notable changes to dsh-session-nav are tracked here. Format follows
 
 ## [Unreleased]
 
+## [0.1.7] - 2026-08-30
+
+### Fixed
+
+- 切 Tab 钢琴键残留（v3，经 CDP 实机诊断确认根因）：官方 `conversation.view` 是**单页多 view 共存**——切到轨迹 / Agent 调度 / 记忆系统时 chat 容器完全不隐藏（DOM 保留、`rect` 1000×744、`display:flex`、`visibility:visible` 均不变），只是 tab 的 `aria-selected` 翻转。此前 v0.1.5/v0.1.6 的可见性检测（DOM 存在性、`display:none`、`clientRects`）都不触发，钢琴键残留。
+  - 修复：新增 `isChatViewActive()`——读 `[role="tab"][aria-selected="true"]` 文本，非「对话」即非 chat 视图；`compute()` 隐藏条件追加 `!isChatViewActive()`；body observer 增加 `attributes` 监听（`aria-selected` / `data-state` / `aria-current`），翻转时 `schedule()`（与 modal 检测同模式）。
+
 ## [0.1.6] - 2026-08-30
 
 ### Fixed
