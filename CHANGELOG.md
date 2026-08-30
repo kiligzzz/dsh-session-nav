@@ -14,6 +14,10 @@ All notable changes to dsh-session-nav are tracked here. Format follows
   - 选择器：`div[class*="_marks"]`（容器）+ `button[aria-label^="跳转到第"]`（按钮，稳定中文文案锁定，跨 DSH 版本不依赖哈希类名）。
   - 实测目标：DSH 0.1.2 官方 `uEy0Ta_marks` 容器（28×70px，右侧 x=1232，8 个跳转按钮）。
 
+### Fixed
+
+- 钢琴键只在「对话」视图渲染：此前挂在 `shell.overlay`（frame-wide 浮动层），切到轨迹 / Agent 调度 / 记忆系统等 Tab 时钢琴键仍残留。现通过 MutationObserver 监测 `[data-conversation-scroll]` 容器存在性，非对话视图返回 null，其他 Tab 不再显示导航条。
+
 ## [0.1.4] - 2026-08-22
 
 ### Fixed
